@@ -4,7 +4,9 @@ import com.google.common.base.CharMatcher;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 import com.sun.pdfview.PagePanel;
- 
+
+import javafx.stage.FileChooser;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,27 +18,31 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.io.ByteArrayInputStream;
 import javax.swing.filechooser.*;
-import javax.swing.SwingUtilities;
 import javax.jnlp.*;
  
 import static com.google.common.base.Strings.isNullOrEmpty;
  
-public class PdfViewer extends JPanel {
+public class PdfViewer extends JPanel implements ActionListener {
     private static enum Navigation {GO_FIRST_PAGE, FORWARD, BACKWARD, GO_LAST_PAGE, GO_N_PAGE}
  
     private static final CharMatcher POSITIVE_DIGITAL = CharMatcher.anyOf("0123456789");
     private static final String GO_PAGE_TEMPLATE = "%s of %s";
     private static final int FIRST_PAGE = 1;
     private int currentPage = FIRST_PAGE;
-    private JButton btnFirstPage, openButton;
+    private JButton btnFirstPage;
     private JButton btnPreviousPage;
     private JTextField txtGoPage;
     private JButton btnNextPage;
     private JButton btnLastPage;
     private PagePanel pagePanel;
     private PDFFile pdfFile;
+    private JFileChooser fc;
+	private static String filename;
  
+    
+
     public PdfViewer() {
+    	fileChooser();
         initial();
     }
  
@@ -237,6 +243,24 @@ public class PdfViewer extends JPanel {
         btnNextPage.setEnabled(moreThanOnePage);
         btnLastPage.setEnabled(moreThanOnePage);
     }
+    
+    public void fileChooser(){
+        //Create a file chooser and set it to read files only, makes sure it opens in current directory
+        String dir = System.getProperty("user.dir");
+        fc = new JFileChooser(dir);
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        
+        //add filter so only PDFs can be chose
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        		"PDFs", "pdf");
+        fc.setFileFilter(filter);
+        
+        
+        fc.showOpenDialog(PdfViewer.this);
+        File file = fc.getSelectedFile();
+        filename = file.getName();
+    
+    }
 
     public static void main(String[] args) {
             try {
@@ -247,11 +271,11 @@ public class PdfViewer extends JPanel {
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 
                 //load a pdf from a byte buffer
-                File file = new File("test-pdf.pdf");
+                PdfViewer pdfViewer = new PdfViewer();
+                File file = new File(filename);
                 RandomAccessFile raf = new RandomAccessFile(file, "r");
                 FileChannel channel = raf.getChannel();
                 ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
-                PdfViewer pdfViewer = new PdfViewer();
                 System.out.println("catch7");
                 final PDFFile pdffile = new PDFFile(buf);
                 pdfViewer.setPDFFile(pdffile);
@@ -266,6 +290,13 @@ public class PdfViewer extends JPanel {
                 e.printStackTrace();
             }
     }
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 }
