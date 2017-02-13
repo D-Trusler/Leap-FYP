@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.io.ByteArrayInputStream;
+import javax.swing.filechooser.*;
+import javax.swing.SwingUtilities;
+import javax.jnlp.*;
  
 import static com.google.common.base.Strings.isNullOrEmpty;
  
@@ -24,7 +28,7 @@ public class PdfViewer extends JPanel {
     private static final String GO_PAGE_TEMPLATE = "%s of %s";
     private static final int FIRST_PAGE = 1;
     private int currentPage = FIRST_PAGE;
-    private JButton btnFirstPage;
+    private JButton btnFirstPage, openButton;
     private JButton btnPreviousPage;
     private JTextField txtGoPage;
     private JButton btnNextPage;
@@ -37,6 +41,7 @@ public class PdfViewer extends JPanel {
     }
  
     private void initial() {
+    	//create layouts and panels for page scrolling
         setLayout(new BorderLayout(0, 0));
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         add(topPanel, BorderLayout.NORTH);
@@ -56,13 +61,16 @@ public class PdfViewer extends JPanel {
         JPanel viewPanel = new JPanel(new BorderLayout(0, 0));
         scrollPane.setViewportView(viewPanel);
  
+        //create page panel to display current page
         pagePanel = new PagePanel();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         pagePanel.setPreferredSize(screenSize);
         viewPanel.add(pagePanel, BorderLayout.CENTER);
  
+        //disables navigation buttons
         disableAllNavigationButton();
  
+        //connect buttons to action listeners
         btnFirstPage.addActionListener(new PageNavigationListener(Navigation.GO_FIRST_PAGE));
         btnPreviousPage.addActionListener(new PageNavigationListener(Navigation.BACKWARD));
         btnNextPage.addActionListener(new PageNavigationListener(Navigation.FORWARD));
@@ -70,6 +78,7 @@ public class PdfViewer extends JPanel {
         txtGoPage.addActionListener(new PageNavigationListener(Navigation.GO_N_PAGE));
     }
  
+    //create button function used to make buttons of same size
     private JButton createButton(String text) {
         JButton button = new JButton(text);
         button.setPreferredSize(new Dimension(55, 20));
@@ -77,6 +86,7 @@ public class PdfViewer extends JPanel {
         return button;
     }
     
+    //format function
         public static String format(String template, Object... args) {
         template = String.valueOf(template); // null -> "null"
         // start substituting the arguments into the '%s' placeholders
@@ -109,6 +119,7 @@ public class PdfViewer extends JPanel {
     }
 
  
+        //function to disbale navigation buttons
     private void disableAllNavigationButton() {
         btnFirstPage.setEnabled(false);
         btnPreviousPage.setEnabled(false);
@@ -116,10 +127,13 @@ public class PdfViewer extends JPanel {
         btnLastPage.setEnabled(false);
     }
  
+    
+    // checks if there is more than one page
     private boolean isMoreThanOnePage(PDFFile pdfFile) {
         return pdfFile.getNumPages() > 1;
     }
  
+    //listeners for navigating page
     private class PageNavigationListener implements ActionListener {
         private final Navigation navigation;
  
@@ -173,7 +187,9 @@ public class PdfViewer extends JPanel {
                 }
             }
         }
- 
+        
+        
+        //command to go to page
         private void goPage(int pageNumber, int numPages) {
             currentPage = pageNumber;
             PDFPage page = pdfFile.getPage(currentPage);
@@ -187,18 +203,22 @@ public class PdfViewer extends JPanel {
             btnLastPage.setEnabled(notLastPage);
         }
  
+        //determine if there is a next page
         private boolean hasNextPage(int numPages) {
             return (++currentPage) <= numPages;
         }
  
+        // determine if there is a previous page
         private boolean hasPreviousPage() {
             return (--currentPage) >= FIRST_PAGE;
         }
  
+        // determine if this is not the last page
         private boolean isNotLastPage(int numPages) {
             return currentPage != numPages;
         }
  
+        // determine if this is not the first page
         private boolean isNotFirstPage() {
             return currentPage != FIRST_PAGE;
         }
