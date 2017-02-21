@@ -22,7 +22,8 @@ import javax.jnlp.*;
 
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Controller.PolicyFlag;
- 
+import com.leapmotion.leap.Listener;
+
 import static com.google.common.base.Strings.isNullOrEmpty;
  
 public class PdfViewer extends JPanel implements ActionListener {
@@ -262,6 +263,10 @@ public class PdfViewer extends JPanel implements ActionListener {
         File file = fc.getSelectedFile();
         filename = file.getName();
     
+    }
+    
+    protected void printCheck(){
+    	System.out.println("trip");
     }
 
     public static void main(String[] args) {

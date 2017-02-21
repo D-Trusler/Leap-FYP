@@ -7,6 +7,7 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
@@ -47,7 +48,7 @@ public class MouseController extends Listener{
 		catch(Exception e)
 		{}
     	
-    	//Right hand, all fingers extended for moving the mouse    	
+    	//Right hand with fingers not extended moving the mouse    	
     	 for (Hand hand:frame.hands())
     	 {
     		 if(hand.isRight())
@@ -72,7 +73,7 @@ public class MouseController extends Listener{
     											 {
     												 if(pinky.type()==Finger.Type.TYPE_PINKY)
     												 {
-    													 if(thumb.isExtended()&&index.isExtended()&&middle.isExtended()&&ring.isExtended()&&pinky.isExtended())
+    													 if(!thumb.isExtended()&&!index.isExtended()&&!middle.isExtended()&&!ring.isExtended()&&!pinky.isExtended())
     													{
     														 Vector handpos = hand.stabilizedPalmPosition();
     														 Vector boxHandpos = box.normalizePoint(handpos);
@@ -91,6 +92,7 @@ public class MouseController extends Listener{
     														 }
     														 xhpos = xupd;
     														 yhpos = yupd;
+    														 
 	
     													}
     												 }
@@ -105,6 +107,107 @@ public class MouseController extends Listener{
     			 }
     		 }
     	 }
+    	 
+    	 //swipe with right hand
+    	 for(Gesture gesture:frame.gestures())
+  		{
+  			for(Hand hand:frame.hands())
+  			{
+  				if(hand.isRight())
+  				{
+  	    			 for(Finger thumb:hand.fingers())
+  	    			 {
+  	    				 for(Finger index:hand.fingers())
+  	    				 {
+  	    					 for(Finger middle:hand.fingers())
+  	    					 {
+  	    						 for(Finger ring:hand.fingers())
+  	    						 {
+  	    							 for(Finger pinky:hand.fingers())
+  	    							 {
+  	    								 if(thumb.type()==Finger.Type.TYPE_THUMB)
+  	    								 {
+  	    									 if(index.type()==Finger.Type.TYPE_INDEX)
+  	    									 {
+  	    										 if(middle.type()==Finger.Type.TYPE_MIDDLE)
+  	    										 {
+  	    											 if(ring.type()==Finger.Type.TYPE_RING)
+  	    											 {
+  	    												 if(pinky.type()==Finger.Type.TYPE_PINKY)
+  														{															
+  															if(thumb.isExtended()&&index.isExtended()&&middle.isExtended()&&ring.isExtended()&&pinky.isExtended())
+  															{															
+  																if(gesture.type()==Type.TYPE_SWIPE)
+  																{
+  																	robot.keyPress(KeyEvent.VK_A);
+  																}										
+  															 															
+  															}
+  														}
+  													}
+  												}
+  											}
+  										}
+  									}
+  								}
+  							}
+  						}
+  					}
+  				}
+  			}
+  			
+  		}
+    	 
+    	 
+    	//swipe with left hand 
+    	for(Gesture gesture:frame.gestures())
+ 		{
+ 			for(Hand hand:frame.hands())
+ 			{
+ 				if(hand.isLeft())
+ 				{
+ 	    			 for(Finger thumb:hand.fingers())
+ 	    			 {
+ 	    				 for(Finger index:hand.fingers())
+ 	    				 {
+ 	    					 for(Finger middle:hand.fingers())
+ 	    					 {
+ 	    						 for(Finger ring:hand.fingers())
+ 	    						 {
+ 	    							 for(Finger pinky:hand.fingers())
+ 	    							 {
+ 	    								 if(thumb.type()==Finger.Type.TYPE_THUMB)
+ 	    								 {
+ 	    									 if(index.type()==Finger.Type.TYPE_INDEX)
+ 	    									 {
+ 	    										 if(middle.type()==Finger.Type.TYPE_MIDDLE)
+ 	    										 {
+ 	    											 if(ring.type()==Finger.Type.TYPE_RING)
+ 	    											 {
+ 	    												 if(pinky.type()==Finger.Type.TYPE_PINKY)
+ 														{															
+ 															if(thumb.isExtended()&&index.isExtended()&&middle.isExtended()&&ring.isExtended()&&pinky.isExtended())
+ 															{															
+ 																if(gesture.type()==Type.TYPE_SWIPE)
+ 																{
+ 																	robot.keyPress(KeyEvent.VK_B);
+ 																}										
+ 															 															
+ 															}
+ 														}
+ 													}
+ 												}
+ 											}
+ 										}
+ 									}
+ 								}
+ 							}
+ 						}
+ 					}
+ 				}
+ 			}
+ 			
+ 		}
     }
 
 	
