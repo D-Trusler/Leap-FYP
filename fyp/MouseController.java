@@ -1,6 +1,10 @@
 package fyp;
 
+import static java.lang.Math.abs;
+
 import java.awt.Dimension;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 
@@ -17,6 +21,8 @@ import com.leapmotion.leap.Gesture.Type;
 public class MouseController extends Listener{
 	
 	public Robot robot;
+	// x hand position, x updated, x difference, x screen position.
+	public double xhpos, xupd, xdif, yhpos, yupd, ydif, xspos, yspos = 0;
 	
 	public void onInit(Controller controller) {
 		//setting up gestures that we're going to use and also adjusting properties
@@ -71,7 +77,21 @@ public class MouseController extends Listener{
     														 Vector handpos = hand.stabilizedPalmPosition();
     														 Vector boxHandpos = box.normalizePoint(handpos);
     														 Dimension screen=java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-    														 robot.mouseMove((int)(screen.width*boxHandpos.getX()),(int)(screen.height-boxHandpos.getY()*screen.height));
+																
+    														 xupd = (screen.width*boxHandpos.getX());
+    														 yupd = (screen.height-boxHandpos.getY()*screen.height);
+    														 xdif = xhpos -xupd;
+    														 ydif = yhpos -yupd;
+	
+    														 if(abs(xdif)<100 && abs(ydif)<100){
+    															 Point pos = MouseInfo.getPointerInfo().getLocation();																
+    															 xspos = pos.getX();
+    															 yspos = pos.getY();
+    															 robot.mouseMove((int)(xspos - xdif),(int)(yspos -ydif));
+    														 }
+    														 xhpos = xupd;
+    														 yhpos = yupd;
+	
     													}
     												 }
     											 }

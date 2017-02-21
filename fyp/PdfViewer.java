@@ -41,9 +41,7 @@ public class PdfViewer extends JPanel implements ActionListener {
     private PDFFile pdfFile;
     private JFileChooser fc;
 	private static String filename;
-	
- 
-    
+	    
 
     public PdfViewer() {
     	fileChooser();
