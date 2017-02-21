@@ -19,6 +19,9 @@ import java.nio.channels.FileChannel;
 import java.io.ByteArrayInputStream;
 import javax.swing.filechooser.*;
 import javax.jnlp.*;
+
+import com.leapmotion.leap.Controller;
+import com.leapmotion.leap.Controller.PolicyFlag;
  
 import static com.google.common.base.Strings.isNullOrEmpty;
  
@@ -38,6 +41,7 @@ public class PdfViewer extends JPanel implements ActionListener {
     private PDFFile pdfFile;
     private JFileChooser fc;
 	private static String filename;
+	
  
     
 
@@ -263,6 +267,15 @@ public class PdfViewer extends JPanel implements ActionListener {
     }
 
     public static void main(String[] args) {
+    	
+    	final MouseController mouse=new MouseController();
+		final Controller controller= new Controller();
+		controller.setPolicyFlags(PolicyFlag.POLICY_BACKGROUND_FRAMES);
+		
+		controller.addListener(mouse);
+	
+
+    	
             try {
                 long heapSize = Runtime.getRuntime().totalMemory();
                 System.out.println("Heap Size = " + heapSize);
@@ -276,13 +289,13 @@ public class PdfViewer extends JPanel implements ActionListener {
                 RandomAccessFile raf = new RandomAccessFile(file, "r");
                 FileChannel channel = raf.getChannel();
                 ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
-                System.out.println("catch7");
+//                System.out.println("catch7");
                 final PDFFile pdffile = new PDFFile(buf);
                 pdfViewer.setPDFFile(pdffile);
                 frame.add(pdfViewer);
                 frame.pack();
                 frame.setVisible(true);
-                System.out.println("catch8");
+//                System.out.println("catch8");
  
                 PDFPage page = pdffile.getPage(0);
                 pdfViewer.getPagePanel().showPage(page);
