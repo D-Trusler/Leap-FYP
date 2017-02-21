@@ -19,6 +19,7 @@ public class MouseController extends Listener{
 	public Robot robot;
 	
 	public void onInit(Controller controller) {
+		//setting up gestures that we're going to use and also adjusting properties
 		controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
 		controller.enableGesture(Gesture.Type.TYPE_SCREEN_TAP);
 		controller.config().setFloat("Gesture.ScreenTap.MinDistance", 0.5f);
@@ -33,7 +34,14 @@ public class MouseController extends Listener{
     	Frame frame = controller.frame();
     	InteractionBox box = frame.interactionBox();
     	
-    	//Right hand, all fingers extended moving mouse    	
+    	try
+		{
+			robot=new Robot();
+		}
+		catch(Exception e)
+		{}
+    	
+    	//Right hand, all fingers extended for moving the mouse    	
     	 for (Hand hand:frame.hands())
     	 {
     		 if(hand.isRight())
