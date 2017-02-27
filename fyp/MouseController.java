@@ -8,22 +8,27 @@ import java.awt.Point;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.sql.Time;
 
+import com.leapmotion.leap.CircleGesture;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Listener;
+import com.leapmotion.leap.SwipeGesture;
 import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.Gesture;
 import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.InteractionBox;
 import com.leapmotion.leap.Vector;
 import com.leapmotion.leap.Gesture.Type;
+import com.leapmotion.leap.GestureList;
 
 public class MouseController extends Listener{
 	
 	public Robot robot;
 	// x hand position, x updated, x difference, x screen position.
 	public double xhpos, xupd, xdif, yhpos, yupd, ydif, xspos, yspos = 0;
+	public long lastGestureTime = 0;
 	
 	public void onInit(Controller controller) {
 		//setting up gestures that we're going to use and also adjusting properties
@@ -31,6 +36,7 @@ public class MouseController extends Listener{
 		controller.enableGesture(Gesture.Type.TYPE_SCREEN_TAP);
 		controller.config().setFloat("Gesture.ScreenTap.MinDistance", 0.5f);
 		controller.enableGesture(Gesture.Type.TYPE_SWIPE);
+		controller.config().setFloat("Gesture.Swipe.MinLength", 100);
 	}
 	
     public void onConnect(Controller controller) {
@@ -75,6 +81,8 @@ public class MouseController extends Listener{
     												 {
     													 if(!thumb.isExtended()&&!index.isExtended()&&!middle.isExtended()&&!ring.isExtended()&&!pinky.isExtended())
     													{
+    														 
+    														 //algorithm to allow smooth mouse movement across multiple screens
     														 Vector handpos = hand.stabilizedPalmPosition();
     														 Vector boxHandpos = box.normalizePoint(handpos);
     														 Dimension screen=java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -108,91 +116,41 @@ public class MouseController extends Listener{
     		 }
     	 }
     	 
-    	 //swipe with right hand
     	 for(Gesture gesture:frame.gestures())
-  		{
-  			for(Hand hand:frame.hands())
-  			{
-  				if(hand.isRight())
-  				{
-  	    			 for(Finger thumb:hand.fingers())
-  	    			 {
-  	    				 for(Finger index:hand.fingers())
-  	    				 {
-  	    					 for(Finger middle:hand.fingers())
-  	    					 {
-  	    						 for(Finger ring:hand.fingers())
-  	    						 {
-  	    							 for(Finger pinky:hand.fingers())
-  	    							 {
-  	    								 if(thumb.type()==Finger.Type.TYPE_THUMB)
-  	    								 {
-  	    									 if(index.type()==Finger.Type.TYPE_INDEX)
-  	    									 {
-  	    										 if(middle.type()==Finger.Type.TYPE_MIDDLE)
-  	    										 {
-  	    											 if(ring.type()==Finger.Type.TYPE_RING)
-  	    											 {
-  	    												 if(pinky.type()==Finger.Type.TYPE_PINKY)
-  														{															
-  															if(thumb.isExtended()&&index.isExtended()&&middle.isExtended()&&ring.isExtended()&&pinky.isExtended())
-  															{															
-  																if(gesture.type()==Type.TYPE_SWIPE)
-  																{
-  																	robot.keyPress(KeyEvent.VK_A);
-  																}										
-  															 															
-  															}
-  														}
-  													}
-  												}
-  											}
-  										}
-  									}
-  								}
-  							}
-  						}
-  					}
-  				}
-  			}
-  			
-  		}
-    	 
-    	 
-    	//swipe with left hand 
-    	for(Gesture gesture:frame.gestures())
  		{
  			for(Hand hand:frame.hands())
  			{
- 				if(hand.isLeft())
+ 				if(hand.isRight())
  				{
- 	    			 for(Finger thumb:hand.fingers())
- 	    			 {
- 	    				 for(Finger index:hand.fingers())
- 	    				 {
- 	    					 for(Finger middle:hand.fingers())
- 	    					 {
- 	    						 for(Finger ring:hand.fingers())
- 	    						 {
- 	    							 for(Finger pinky:hand.fingers())
- 	    							 {
- 	    								 if(thumb.type()==Finger.Type.TYPE_THUMB)
- 	    								 {
- 	    									 if(index.type()==Finger.Type.TYPE_INDEX)
- 	    									 {
- 	    										 if(middle.type()==Finger.Type.TYPE_MIDDLE)
- 	    										 {
- 	    											 if(ring.type()==Finger.Type.TYPE_RING)
- 	    											 {
- 	    												 if(pinky.type()==Finger.Type.TYPE_PINKY)
+ 					for(Finger thumb:hand.fingers())
+ 					{
+ 						for(Finger index:hand.fingers())
+ 						{
+ 							for(Finger middle:hand.fingers())
+ 							{
+ 								for(Finger pinky:hand.fingers())
+ 								{
+ 									for(Finger ring:hand.fingers())
+ 									{
+ 										if(thumb.type()==Finger.Type.TYPE_THUMB)
+ 										{
+ 											if(index.type()==Finger.Type.TYPE_INDEX)
+ 											{
+ 												if(middle.type()==Finger.Type.TYPE_MIDDLE)
+ 												{
+ 													if(pinky.type()==Finger.Type.TYPE_PINKY)
+ 													{
+ 														if(ring.type()==Finger.Type.TYPE_RING)
  														{															
- 															if(thumb.isExtended()&&index.isExtended()&&middle.isExtended()&&ring.isExtended()&&pinky.isExtended())
+ 															if(thumb.isExtended()&&index.isExtended()&&middle.isExtended()&&pinky.isExtended()&&ring.isExtended())
  															{															
  																if(gesture.type()==Type.TYPE_SWIPE)
- 																{
- 																	robot.keyPress(KeyEvent.VK_B);
- 																}										
- 															 															
+ 																{	SwipeGesture swipe = new SwipeGesture(gesture);
+ 																	if(System.currentTimeMillis() - lastGestureTime > 100 &&swipe.direction().getX()<0){
+ 												    				robot.keyPress(KeyEvent.VK_A);
+ 												    				lastGestureTime = System.currentTimeMillis();
+ 												    			}
+ 																														
  															}
  														}
  													}
@@ -205,11 +163,59 @@ public class MouseController extends Listener{
  						}
  					}
  				}
- 			}
- 			
+ 			}			
  		}
-    }
+ 	}
 
-	
-
+	 for(Gesture gesture:frame.gestures())
+	{
+		for(Hand hand:frame.hands())
+		{
+			if(hand.isLeft())
+			{
+				for(Finger thumb:hand.fingers())
+				{
+					for(Finger index:hand.fingers())
+					{
+						for(Finger middle:hand.fingers())
+						{
+							for(Finger pinky:hand.fingers())
+							{
+								for(Finger ring:hand.fingers())
+								{
+									if(thumb.type()==Finger.Type.TYPE_THUMB)
+									{
+										if(index.type()==Finger.Type.TYPE_INDEX)
+										{
+											if(middle.type()==Finger.Type.TYPE_MIDDLE)
+											{
+												if(pinky.type()==Finger.Type.TYPE_PINKY)
+												{
+													if(ring.type()==Finger.Type.TYPE_RING)
+													{															
+														if(thumb.isExtended()&&index.isExtended()&&middle.isExtended()&&pinky.isExtended()&&ring.isExtended())
+														{															
+															if(gesture.type()==Type.TYPE_SWIPE)
+															{	SwipeGesture swipe = new SwipeGesture(gesture);
+																if(System.currentTimeMillis() - lastGestureTime > 100 &&swipe.direction().getX()>0){
+											    				robot.keyPress(KeyEvent.VK_B);
+											    				lastGestureTime = System.currentTimeMillis();
+											    			}
+																													
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}			
+	}
+  }
+}
 }
