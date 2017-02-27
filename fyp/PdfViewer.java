@@ -47,11 +47,19 @@ public class PdfViewer extends JPanel implements ActionListener {
 	    
 
     public PdfViewer() {
+    	MouseController mouse=new MouseController(this);
+		Controller controller= new Controller();
+		controller.setPolicy(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES);
+		
+		controller.addListener(mouse);
+		
     	fileChooser();
         initial();
     }
  
     private void initial() {
+    	
+   	
     	//create layouts and panels for page scrolling
         setLayout(new BorderLayout(0, 0));
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -87,6 +95,7 @@ public class PdfViewer extends JPanel implements ActionListener {
         btnNextPage.addActionListener(new PageNavigationListener(Navigation.FORWARD));
         btnLastPage.addActionListener(new PageNavigationListener(Navigation.GO_LAST_PAGE));
         txtGoPage.addActionListener(new PageNavigationListener(Navigation.GO_N_PAGE));
+        
     }
  
     //create button function used to make buttons of same size
@@ -272,15 +281,7 @@ public class PdfViewer extends JPanel implements ActionListener {
     }
 
     public static void main(String[] args) {
-    	
-    	final MouseController mouse=new MouseController();
-		final Controller controller= new Controller();
-		controller.setPolicyFlags(PolicyFlag.POLICY_BACKGROUND_FRAMES);
-		
-		controller.addListener(mouse);
-	
-
-    	
+    	    	
             try {
                 long heapSize = Runtime.getRuntime().totalMemory();
                 System.out.println("Heap Size = " + heapSize);
@@ -294,25 +295,22 @@ public class PdfViewer extends JPanel implements ActionListener {
                 RandomAccessFile raf = new RandomAccessFile(file, "r");
                 FileChannel channel = raf.getChannel();
                 ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
-//                System.out.println("catch7");
                 final PDFFile pdffile = new PDFFile(buf);
                 pdfViewer.setPDFFile(pdffile);
                 frame.add(pdfViewer);
                 frame.pack();
                 frame.setVisible(true);
-                frame.addWindowListener(new WindowAdapter() {
-                	public void windowClosing(WindowEvent e){
-                		controller.removeListener(mouse);
-        				System.exit(0);
-                	}
-                });
-//                System.out.println("catch8");
  
                 PDFPage page = pdffile.getPage(0);
                 pdfViewer.getPagePanel().showPage(page);
+                System.out.println("catch1");
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            System.out.println("catch2");
+            //use singleton pattern
+            
     }
 
 	@Override

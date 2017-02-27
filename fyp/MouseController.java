@@ -25,6 +25,12 @@ import com.leapmotion.leap.GestureList;
 
 public class MouseController extends Listener{
 	
+	private PdfViewer pdfView;
+	
+	public MouseController (PdfViewer pdfView) {
+		this.pdfView = pdfView;
+	}
+	
 	public Robot robot;
 	// x hand position, x updated, x difference, x screen position.
 	public double xhpos, xupd, xdif, yhpos, yupd, ydif, xspos, yspos = 0;
@@ -46,6 +52,7 @@ public class MouseController extends Listener{
     public void onFrame(Controller controller) {
     	Frame frame = controller.frame();
     	InteractionBox box = frame.interactionBox();
+    	System.out.println("frame " + frame.id());
     	
     	try
 		{
