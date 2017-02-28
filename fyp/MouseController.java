@@ -26,16 +26,15 @@ import com.leapmotion.leap.GestureList;
 public class MouseController extends Listener{
 	
 	private PdfViewer pdfView;
-	
-	public MouseController (PdfViewer pdfView) {
-		this.pdfView = pdfView;
-	}
-	
 	public Robot robot;
 	// x hand position, x updated, x difference, x screen position.
 	public double xhpos, xupd, xdif, yhpos, yupd, ydif, xspos, yspos = 0;
 	public long lastGestureTime = 0;
 	
+	public MouseController (PdfViewer pdfView) {
+		this.pdfView = pdfView;
+	}
+		
 	public void onInit(Controller controller) {
 		//setting up gestures that we're going to use and also adjusting properties
 		controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
@@ -154,7 +153,13 @@ public class MouseController extends Listener{
  																if(gesture.type()==Type.TYPE_SWIPE)
  																{	SwipeGesture swipe = new SwipeGesture(gesture);
  																	if(System.currentTimeMillis() - lastGestureTime > 100 &&swipe.direction().getX()<0){
- 												    				robot.keyPress(KeyEvent.VK_A);
+ 																	robot.keyPress(KeyEvent.VK_A);
+ 												    				int numPages = pdfView.numPages;
+ 												    				int pageNumber = pdfView.currentPage;
+ 												    				if(pageNumber<numPages){
+ 												    					pdfView.goPage(pageNumber+1,numPages);
+ 												    				}
+ 												    				//pdfView.Navigation.Forward();
  												    				lastGestureTime = System.currentTimeMillis();
  												    			}
  																														

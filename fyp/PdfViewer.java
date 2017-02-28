@@ -34,14 +34,15 @@ public class PdfViewer extends JPanel implements ActionListener {
     private static final CharMatcher POSITIVE_DIGITAL = CharMatcher.anyOf("0123456789");
     private static final String GO_PAGE_TEMPLATE = "%s of %s";
     private static final int FIRST_PAGE = 1;
-    private int currentPage = FIRST_PAGE;
+    public int currentPage = FIRST_PAGE;
     private JButton btnFirstPage;
     private JButton btnPreviousPage;
     private JTextField txtGoPage;
     private JButton btnNextPage;
     private JButton btnLastPage;
     private PagePanel pagePanel;
-    private PDFFile pdfFile;
+    public int numPages;
+    public PDFFile pdfFile;
     private JFileChooser fc;
 	private static String filename;
 	    
@@ -152,7 +153,8 @@ public class PdfViewer extends JPanel implements ActionListener {
     private boolean isMoreThanOnePage(PDFFile pdfFile) {
         return pdfFile.getNumPages() > 1;
     }
- 
+    
+
     //listeners for navigating page
     private class PageNavigationListener implements ActionListener {
         private final Navigation navigation;
@@ -207,41 +209,40 @@ public class PdfViewer extends JPanel implements ActionListener {
                 }
             }
         }
-        
-        
-        //command to go to page
-        private void goPage(int pageNumber, int numPages) {
-            currentPage = pageNumber;
-            PDFPage page = pdfFile.getPage(currentPage);
-            pagePanel.showPage(page);
-            boolean notFirstPage = isNotFirstPage();
-            btnFirstPage.setEnabled(notFirstPage);
-            btnPreviousPage.setEnabled(notFirstPage);
-            txtGoPage.setText(format(GO_PAGE_TEMPLATE, currentPage, numPages));
-            boolean notLastPage = isNotLastPage(numPages);
-            btnNextPage.setEnabled(notLastPage);
-            btnLastPage.setEnabled(notLastPage);
-        }
- 
-        //determine if there is a next page
-        private boolean hasNextPage(int numPages) {
-            return (++currentPage) <= numPages;
-        }
- 
-        // determine if there is a previous page
-        private boolean hasPreviousPage() {
-            return (--currentPage) >= FIRST_PAGE;
-        }
- 
-        // determine if this is not the last page
-        private boolean isNotLastPage(int numPages) {
-            return currentPage != numPages;
-        }
- 
-        // determine if this is not the first page
-        private boolean isNotFirstPage() {
-            return currentPage != FIRST_PAGE;
-        }
+    }
+    
+    //command to go to page
+    public void goPage(int pageNumber, int numPages) {
+        currentPage = pageNumber;
+        PDFPage page = pdfFile.getPage(currentPage);
+        pagePanel.showPage(page);
+        boolean notFirstPage = isNotFirstPage();
+        btnFirstPage.setEnabled(notFirstPage);
+        btnPreviousPage.setEnabled(notFirstPage);
+        txtGoPage.setText(format(GO_PAGE_TEMPLATE, currentPage, numPages));
+        boolean notLastPage = isNotLastPage(numPages);
+        btnNextPage.setEnabled(notLastPage);
+        btnLastPage.setEnabled(notLastPage);
+    }
+
+    //determine if there is a next page
+    private boolean hasNextPage(int numPages) {
+        return (++currentPage) <= numPages;
+    }
+
+    // determine if there is a previous page
+    private boolean hasPreviousPage() {
+        return (--currentPage) >= FIRST_PAGE;
+    }
+
+    // determine if this is not the last page
+    private boolean isNotLastPage(int numPages) {
+        return currentPage != numPages;
+    }
+
+    // determine if this is not the first page
+    private boolean isNotFirstPage() {
+        return currentPage != FIRST_PAGE;
     }
  
     public PagePanel getPagePanel() {
@@ -309,7 +310,8 @@ public class PdfViewer extends JPanel implements ActionListener {
             }
 
             System.out.println("catch2");
-            //use singleton pattern
+            //use singleton pattern?
+            
             
     }
 
@@ -318,7 +320,6 @@ public class PdfViewer extends JPanel implements ActionListener {
 		// TODO Auto-generated method stub
 		
 	}
-
 
 
 }
