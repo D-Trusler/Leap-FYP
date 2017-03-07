@@ -1,30 +1,20 @@
 
 package fyp;
 
-import com.leapmotion.leap.*;
-import com.leapmotion.leap.Controller;
-import java.io.*;
+import javax.swing.SwingUtilities;
 
 
 class HelloWorld{
 	
+	 static Runnable doHelloWorld = new Runnable() {
+	     public void run() {
+	         System.out.println("Hello World on " + Thread.currentThread());
+	     }
+	 };
 
 	public static void main(String[] args) {
-		SampleListener listener = new SampleListener();
-		Controller controller = new Controller();
-		
-		controller.addListener(listener);
-
-		
-		  System.out.println("Press Enter to quit...");
-	        try {
-	            System.in.read();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-
-		
-		controller.removeListener(listener);
+		SwingUtilities.invokeLater(doHelloWorld);
+		 System.out.println("This might well be displayed before the other message.");
 
 	}
 
