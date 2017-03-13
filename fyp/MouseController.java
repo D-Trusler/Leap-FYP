@@ -30,6 +30,8 @@ public class MouseController extends Listener{
 	// x hand position, x updated, x difference, x screen position.
 	public double xhpos, xupd, xdif, yhpos, yupd, ydif, xspos, yspos = 0;
 	public long lastGestureTime = 0;
+	Singleton newInstace;
+	private Singleton newInstance;
 	
 	public MouseController () {
 	}
@@ -44,13 +46,20 @@ public class MouseController extends Listener{
 	}
 	
     public void onConnect(Controller controller) {
+    	//notify connected
         System.out.println("Connected");
+        
+        //get singleton instance
+        newInstance = Singleton.getInstance();
+        //print singleton ID to check across classes
+        System.out.println("Leap Instance ID: " + System.identityHashCode(newInstance));
+       
     }
     
     public void onFrame(Controller controller) {
     	Frame frame = controller.frame();
     	InteractionBox box = frame.interactionBox();
-    	System.out.println("frame " + frame.id());
+    	//System.out.println("frame " + frame.id());
     	
     	try
 		{
