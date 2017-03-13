@@ -9,35 +9,6 @@ import com.leapmotion.leap.Controller;
 
 public class Main {
 	
-//    static class ControllerHandler extends SwingWorker<Void, Void>{
-//    	
-//    	public ControllerHandler()
-//    	{
-//    		try{
-//    			MouseController mouse = new MouseController();
-//    			Controller controller = new Controller();
-//    			controller.setPolicy(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES);
-//    			controller.addListener(mouse);
-//    		}
-//    		catch(Exception e)
-//    		{
-//    			System.out.println(e.getMessage());
-//    		}
-//    	}
-//
-//		@Override
-//		public Void doInBackground(){
-//			return null;
-//		}
-//		
-//		@Override
-//		public void done()
-//		{
-//			
-//		}
-//    	
-//    }
-	
 	public static void main(String[] args){
 		
 		//creates a singleton
@@ -55,10 +26,18 @@ public class Main {
 		controller .setPolicy(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES);
 		controller.addListener(mouse);
 		
+		//debugs
+		newInstance.write("c1");
+		newInstance.write("c2");
+		newInstance.write("c3");
+		newInstance.write("c4");
+		newInstance.write("c5");
+		newInstance.write("c6");
+		newInstance.write("c7");
+		
 		SwingUtilities.invokeLater( new Runnable () {
         	public void run() {
         		PdfViewer pdfview = new PdfViewer();
-        		
         	}
 		});
 		

@@ -60,6 +60,7 @@ public class MouseController extends Listener{
     	Frame frame = controller.frame();
     	InteractionBox box = frame.interactionBox();
     	//System.out.println("frame " + frame.id());
+    	newInstance.write(String.valueOf(frame.id()));
     	
     	try
 		{
