@@ -60,7 +60,7 @@ public class MouseController extends Listener{
     	Frame frame = controller.frame();
     	InteractionBox box = frame.interactionBox();
     	//System.out.println("frame " + frame.id());
-    	newInstance.write(String.valueOf(frame.id()));
+    	//newInstance.write(String.valueOf(frame.id()));
     	
     	try
 		{
@@ -131,6 +131,7 @@ public class MouseController extends Listener{
     		 }
     	 }
     	 
+    	//next page gesture, swipe with right hand
     	 for(Gesture gesture:frame.gestures())
  		{
  			for(Hand hand:frame.hands())
@@ -158,11 +159,12 @@ public class MouseController extends Listener{
  														if(ring.type()==Finger.Type.TYPE_RING)
  														{															
  															if(thumb.isExtended()&&index.isExtended()&&middle.isExtended()&&pinky.isExtended()&&ring.isExtended())
- 															{															
+ 															{ 																
  																if(gesture.type()==Type.TYPE_SWIPE)
- 																{	SwipeGesture swipe = new SwipeGesture(gesture);
- 																	if(System.currentTimeMillis() - lastGestureTime > 100 &&swipe.direction().getX()<0){
- 																	robot.keyPress(KeyEvent.VK_A);
+ 																{	
+ 																	SwipeGesture swipe = new SwipeGesture(gesture);
+ 																	if(System.currentTimeMillis() - lastGestureTime > 100 &&  swipe.direction().getX()<0){
+ 																	newInstance.write("next_page");
  												    				//int numPages = pdfView.numPages;
  												    				//int pageNumber = pdfView.currentPage;
  												    				//if(pageNumber<numPages){

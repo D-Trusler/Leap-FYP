@@ -49,20 +49,37 @@ public class PdfViewer extends JPanel implements ActionListener {
 	
 	//Command string is pulled from the singleton
 	private String command = new String();
+
 	
 	public PdfViewer(){
         //get singleton instance
         Singleton newInstance = Singleton.getInstance();
         //print singleton ID to check across classes
         System.out.println("GUI Instance ID: " + System.identityHashCode(newInstance));
+
+		//choose file
+		fileChooser();
+		
+		//initialize pdf
+		initial();
+		
+		
+		//debug
+		//newInstance.write("next_page");
+		
         
         //action listener called in our event loop
         // reads from newInstance and triggers runCommand
+
 		ActionListener eventloop = new ActionListener() {
 
 			public void actionPerformed(ActionEvent evt) {
 				command = newInstance.read();
-				runCommand(command);
+				if (command != null){
+//					System.out.println("read: " + command);
+					runCommand(command);
+				}
+				//System.out.println(command);
 				}
 		};
         
@@ -70,16 +87,22 @@ public class PdfViewer extends JPanel implements ActionListener {
 		timer.setRepeats(true);
 		timer.start();
         
-		//choose file
-		fileChooser();
+				
 		
-		//initialize pdf
-		initial();
+		//System.out.println(pdfFile.;
 		
 
 	}
 	
 	private void runCommand(String command){
+		System.out.println("command :" + command);
+		if (currentPage<numPages && command == "next_page"){
+			//debug
+//			System.out.println(numPages);
+//			System.out.println("next_page");
+//			System.out.println("current page: " + currentPage);
+			goPage(currentPage+1,numPages);	
+		}
 		
 	}
 	
@@ -137,6 +160,8 @@ public class PdfViewer extends JPanel implements ActionListener {
 		frame.add(this);
 		frame.pack();
 		frame.setVisible(true);
+		
+		numPages = pdfFile.getNumPages();
 		
 		PDFPage page = pdfFile.getPage(0);
 		getPagePanel().showPage(page);
