@@ -27,13 +27,13 @@ public class Main {
 		controller.addListener(mouse);
 		
 		//debugs
-		newInstance.write("c1");
-		newInstance.write("c2");
-		newInstance.write("c3");
-		newInstance.write("c4");
-		newInstance.write("c5");
-		newInstance.write("c6");
-		newInstance.write("c7");
+//		newInstance.write("c1");
+//		newInstance.write("c2");
+//		newInstance.write("c3");
+//		newInstance.write("c4");
+//		newInstance.write("c5");
+//		newInstance.write("c6");
+//		newInstance.write("c7");
 		
 		SwingUtilities.invokeLater( new Runnable () {
         	public void run() {

@@ -32,6 +32,7 @@ public class MouseController extends Listener{
 	public long lastGestureTime = 0;
 	Singleton newInstace;
 	private Singleton newInstance;
+	private int swipecd = 250;
 	
 	public MouseController () {
 	}
@@ -163,14 +164,8 @@ public class MouseController extends Listener{
  																if(gesture.type()==Type.TYPE_SWIPE)
  																{	
  																	SwipeGesture swipe = new SwipeGesture(gesture);
- 																	if(System.currentTimeMillis() - lastGestureTime > 100 &&  swipe.direction().getX()<0){
+ 																	if(System.currentTimeMillis() - lastGestureTime > swipecd &&  swipe.direction().getX()<0){
  																	newInstance.write("next_page");
- 												    				//int numPages = pdfView.numPages;
- 												    				//int pageNumber = pdfView.currentPage;
- 												    				//if(pageNumber<numPages){
- 												    				//	pdfView.goPage(pageNumber+1,numPages);
- 												    				//}
- 												    				//pdfView.Navigation.Forward();
  												    				lastGestureTime = System.currentTimeMillis();
  												    			}
  																														
@@ -220,8 +215,8 @@ public class MouseController extends Listener{
 														{															
 															if(gesture.type()==Type.TYPE_SWIPE)
 															{	SwipeGesture swipe = new SwipeGesture(gesture);
-																if(System.currentTimeMillis() - lastGestureTime > 100 &&swipe.direction().getX()>0){
-											    				robot.keyPress(KeyEvent.VK_B);
+																if(System.currentTimeMillis() - lastGestureTime > swipecd &&swipe.direction().getX()>0){
+											    				newInstance.write("previous_page");
 											    				lastGestureTime = System.currentTimeMillis();
 											    			}
 																													

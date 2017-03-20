@@ -53,7 +53,7 @@ public class PdfViewer extends JPanel implements ActionListener {
 	
 	public PdfViewer(){
         //get singleton instance
-        Singleton newInstance = Singleton.getInstance();
+        final Singleton newInstance = Singleton.getInstance();
         //print singleton ID to check across classes
         System.out.println("GUI Instance ID: " + System.identityHashCode(newInstance));
 
@@ -62,8 +62,8 @@ public class PdfViewer extends JPanel implements ActionListener {
 		
 		//initialize pdf
 		initial();
-		
-		
+
+		//changePDF();
 		//debug
 		//newInstance.write("next_page");
 		
@@ -94,14 +94,24 @@ public class PdfViewer extends JPanel implements ActionListener {
 
 	}
 	
+	private void changePDF(){
+		fileChooser();
+		manageFile();
+		
+		numPages = pdfFile.getNumPages();
+		
+		PDFPage page = pdfFile.getPage(0);
+		getPagePanel().showPage(page);
+		
+	}
+	
 	private void runCommand(String command){
-		System.out.println("command :" + command);
+//		System.out.println("command :" + command);
 		if (currentPage<numPages && command == "next_page"){
-			//debug
-//			System.out.println(numPages);
-//			System.out.println("next_page");
-//			System.out.println("current page: " + currentPage);
 			goPage(currentPage+1,numPages);	
+		}
+		if (currentPage>1 && command == "previous_page"){
+			goPage(currentPage-1,numPages);	
 		}
 		
 	}
@@ -143,10 +153,49 @@ public class PdfViewer extends JPanel implements ActionListener {
         btnLastPage.addActionListener(new PageNavigationListener(Navigation.GO_LAST_PAGE));
         txtGoPage.addActionListener(new PageNavigationListener(Navigation.GO_N_PAGE));
         
-		
-		// creates JFrame
+        manageFile();
 		JFrame frame = new JFrame("PDF Test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+		
+//		// creates JFrame
+//		JFrame frame = new JFrame("PDF Test");
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		
+//		try {
+//		//file is given by fileChooser() which is called before this
+//		File file = new File(filename);
+//		//Access file, gets channels and sets up a bytebuffer then assigns pdfFile variable to read PDF
+//		RandomAccessFile raf = new RandomAccessFile(file, "r");
+//		FileChannel channel = raf.getChannel();
+//		ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+//		pdfFile = new PDFFile(buf);
+//		setPDFFile(pdfFile);
+//		frame.add(this);
+//		frame.pack();
+//		frame.setVisible(true);
+//		
+//		numPages = pdfFile.getNumPages();
+//		
+//		PDFPage page = pdfFile.getPage(0);
+//		getPagePanel().showPage(page);
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		frame.add(this);
+		frame.pack();
+		frame.setVisible(true);
+		
+		numPages = pdfFile.getNumPages();
+		
+		PDFPage page = pdfFile.getPage(0);
+		getPagePanel().showPage(page);
+	}
+	
+	private void manageFile(){
+		
+	
 		
 		try {
 		//file is given by fileChooser() which is called before this
@@ -157,9 +206,7 @@ public class PdfViewer extends JPanel implements ActionListener {
 		ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
 		pdfFile = new PDFFile(buf);
 		setPDFFile(pdfFile);
-		frame.add(this);
-		frame.pack();
-		frame.setVisible(true);
+
 		
 		numPages = pdfFile.getNumPages();
 		
@@ -169,6 +216,8 @@ public class PdfViewer extends JPanel implements ActionListener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		
 	}
 	
 	private void disableAllNavigationButton() {
@@ -206,7 +255,6 @@ public class PdfViewer extends JPanel implements ActionListener {
 	}	
 
 	
-	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
