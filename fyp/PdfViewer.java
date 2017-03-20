@@ -206,6 +206,7 @@ public class PdfViewer extends JPanel implements ActionListener {
 		ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
 		pdfFile = new PDFFile(buf);
 		setPDFFile(pdfFile);
+		raf.close();
 
 		
 		numPages = pdfFile.getNumPages();
