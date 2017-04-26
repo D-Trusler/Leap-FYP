@@ -40,9 +40,9 @@ public class Singleton {
 		
 	}
 	
-	public void test(){
-		System.out.println("Singleton Test");
-	}
+//	public void test(){
+//		System.out.println("Singleton Test");
+//	}
 	
 	//writes command to end of list
 	public void write(String commandtowrite){
