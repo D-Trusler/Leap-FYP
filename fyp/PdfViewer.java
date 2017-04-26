@@ -157,7 +157,7 @@ public class PdfViewer extends JPanel implements ActionListener {
 		JFrame frame = new JFrame("PDF Test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-		
+
 		frame.add(this);
 		frame.pack();
 		frame.setVisible(true);
