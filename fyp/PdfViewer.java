@@ -158,31 +158,6 @@ public class PdfViewer extends JPanel implements ActionListener {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
 		
-//		// creates JFrame
-//		JFrame frame = new JFrame("PDF Test");
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		
-//		try {
-//		//file is given by fileChooser() which is called before this
-//		File file = new File(filename);
-//		//Access file, gets channels and sets up a bytebuffer then assigns pdfFile variable to read PDF
-//		RandomAccessFile raf = new RandomAccessFile(file, "r");
-//		FileChannel channel = raf.getChannel();
-//		ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
-//		pdfFile = new PDFFile(buf);
-//		setPDFFile(pdfFile);
-//		frame.add(this);
-//		frame.pack();
-//		frame.setVisible(true);
-//		
-//		numPages = pdfFile.getNumPages();
-//		
-//		PDFPage page = pdfFile.getPage(0);
-//		getPagePanel().showPage(page);
-//
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 		frame.add(this);
 		frame.pack();
 		frame.setVisible(true);
@@ -221,10 +196,6 @@ public class PdfViewer extends JPanel implements ActionListener {
 		
 	}
 	
-	private void disableAllNavigationButton() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	private void fileChooser(){
 		//Create a file chooser and set it to read files only, makes sure it opens in current directory
@@ -262,7 +233,7 @@ public class PdfViewer extends JPanel implements ActionListener {
 	}
 	
 	//function to disbale navigation buttons
-	private void disableAllNavigationButton1() {
+	private void disableAllNavigationButton() {
 		btnFirstPage.setEnabled(false);
 		btnPreviousPage.setEnabled(false);
 		btnNextPage.setEnabled(false);
@@ -315,8 +286,6 @@ public class PdfViewer extends JPanel implements ActionListener {
         return pagePanel;
     }
  
-
-	
     // checks if there is more than one page
     private boolean isMoreThanOnePage(PDFFile pdfFile) {
         return pdfFile.getNumPages() > 1;

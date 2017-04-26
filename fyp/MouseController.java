@@ -33,7 +33,7 @@ public class MouseController extends Listener{
 	Singleton newInstace;
 	private Singleton newInstance;
 	private int swipecd = 250;
-	
+
 	private int mask = InputEvent.BUTTON1_DOWN_MASK;
 
 	public MouseController () {
@@ -149,9 +149,9 @@ public class MouseController extends Listener{
 						{
 							for(Finger middle:hand.fingers())
 							{
-								for(Finger pinky:hand.fingers())
+								for(Finger ring:hand.fingers())
 								{
-									for(Finger ring:hand.fingers())
+									for(Finger pinky:hand.fingers())
 									{
 										if(thumb.type()==Finger.Type.TYPE_THUMB)
 										{
@@ -159,9 +159,9 @@ public class MouseController extends Listener{
 											{
 												if(middle.type()==Finger.Type.TYPE_MIDDLE)
 												{
-													if(pinky.type()==Finger.Type.TYPE_PINKY)
+													if(ring.type()==Finger.Type.TYPE_PINKY)
 													{
-														if(ring.type()==Finger.Type.TYPE_RING)
+														if(pinky.type()==Finger.Type.TYPE_RING)
 														{															
 															if(thumb.isExtended()&&index.isExtended()&&middle.isExtended()&&pinky.isExtended()&&ring.isExtended())
 															{ 																
