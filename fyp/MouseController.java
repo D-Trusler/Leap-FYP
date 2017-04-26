@@ -41,11 +41,18 @@ public class MouseController extends Listener{
 
 	public void onInit(Controller controller) {
 		//setting up gestures that we're going to use and also adjusting properties
-		controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
+
 		controller.enableGesture(Gesture.Type.TYPE_SCREEN_TAP);
 		controller.config().setFloat("Gesture.ScreenTap.MinDistance", 0.5f);
 		controller.enableGesture(Gesture.Type.TYPE_SWIPE);
 		controller.config().setFloat("Gesture.Swipe.MinLength", 100);
+		
+		try
+		{
+			robot=new Robot();
+		}
+		catch(Exception e)
+		{}
 	}
 
 	public void onConnect(Controller controller) {
@@ -65,12 +72,6 @@ public class MouseController extends Listener{
 		//System.out.println("frame " + frame.id());
 		//newInstance.write(String.valueOf(frame.id()));
 
-		try
-		{
-			robot=new Robot();
-		}
-		catch(Exception e)
-		{}
 
 		//Right hand with fingers not extended moving the mouse    	
 		for (Hand hand:frame.hands())
@@ -110,7 +111,7 @@ public class MouseController extends Listener{
 															xdif = xhpos -xupd;
 															ydif = yhpos -yupd;
 
-															if(abs(xdif)<100 && abs(ydif)<100){
+															if(abs(xdif)<100 || abs(ydif)<100){
 																Point pos = MouseInfo.getPointerInfo().getLocation();																
 																xspos = pos.getX();
 																yspos = pos.getY();
